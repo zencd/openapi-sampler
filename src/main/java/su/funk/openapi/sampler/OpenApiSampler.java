@@ -59,8 +59,8 @@ class OpenApiSampler {
         if (schema.getAllOf() != null && !schema.getAllOf().isEmpty()) {
             var allOf = schema.getAllOf();
             var combinedExampleProperties = new HashMap<String, Object>();
-            allOf.forEach(s -> {
-                var exampleMap = getSchemaExample(spec, s);
+            allOf.forEach(aSchema -> {
+                var exampleMap = getSchemaExample(spec, aSchema);
                 if (exampleMap instanceof Map) {
                     combinedExampleProperties.putAll(((Map<String, Object>) exampleMap));
                 }

@@ -23,7 +23,7 @@ class OpenApiSamplerTest {
             var schema = spec.getComponents().getSchemas().get(row[1])
             def actualSample = new OpenApiSampler().getSchemaExample(spec, schema)
             def expectedSample = new JsonSlurper().parse(new File(goldenFile))
-            println JsonOutput.toJson(actualSample)
+            //println JsonOutput.toJson(actualSample)
             assert expectedSample == actualSample
         }
     }

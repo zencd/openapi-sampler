@@ -4,15 +4,17 @@ import groovy.json.JsonOutput
 import groovy.json.JsonSlurper
 import io.swagger.v3.parser.OpenAPIV3Parser
 import org.junit.jupiter.api.Test
+
 import java.nio.file.Paths
 
 class OpenApiSamplerTest {
 
     @Test
-    void test_() {
+    void test() {
         def data = [
                 ["petstore-3-with-examples.json", "Customer", "petstore-customer-pre.json"],
                 ["petstore-3-no-examples.json", "Customer", "petstore-customer-auto.json"],
+                ["petstore-3-no-examples.json", "Order", "petstore-order-auto.json"],
         ]
         for (Object row : data) {
             String specFile = getResourcePath(row[0])

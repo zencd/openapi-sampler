@@ -9,9 +9,6 @@ import io.swagger.v3.oas.models.media.ObjectSchema;
 import io.swagger.v3.oas.models.media.Schema;
 
 import java.time.OffsetDateTime;
-import java.time.ZoneId;
-import java.time.ZoneOffset;
-import java.time.format.DateTimeFormatter;
 import java.util.Collections;
 import java.util.Date;
 import java.util.HashMap;
@@ -21,8 +18,6 @@ import java.util.stream.Collectors;
 
 class OpenApiSampler {
 
-    public static final DateTimeFormatter DATE_FORMATTER = DateTimeFormatter.ISO_LOCAL_DATE.withZone(ZoneId.from(ZoneOffset.UTC));
-    public static final DateTimeFormatter DATE_TIME_FORMATTER = DateTimeFormatter.ISO_OFFSET_DATE_TIME.withZone(ZoneId.from(ZoneOffset.UTC));
     public static final String REF_PREFIX_SCHEMAS = "#/components/schemas/";
 
     public Object getSchemaExample(OpenAPI spec, Schema<?> schema) {
@@ -31,9 +26,9 @@ class OpenApiSampler {
             return getSchemaExample(spec, referent);
         } else if (schema.getExample() != null) {
             if (schema instanceof DateTimeSchema) {
-                return DATE_TIME_FORMATTER.format((OffsetDateTime) schema.getExample());
+                return PropertySampler.DATE_TIME_FORMATTER.format((OffsetDateTime) schema.getExample());
             } else if (schema instanceof DateSchema) {
-                return DATE_FORMATTER.format(((Date) schema.getExample()).toInstant());
+                return PropertySampler.DATE_FORMATTER.format(((Date) schema.getExample()).toInstant());
             } else {
                 return schema.getExample();
             }

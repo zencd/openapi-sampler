@@ -1,12 +1,19 @@
 package su.funk.openapi.sampler;
 
 import io.swagger.v3.oas.models.media.Schema;
-import java.time.LocalDateTime;
+
 import java.time.OffsetDateTime;
-import java.time.temporal.ChronoUnit;
+import java.time.ZoneId;
+import java.time.ZoneOffset;
+import java.time.format.DateTimeFormatter;
 import java.util.UUID;
 
 class PropertySampler {
+
+    static OffsetDateTime DATE = OffsetDateTime.parse("2023-03-29T21:14:08Z");
+
+    static final DateTimeFormatter DATE_FORMATTER = DateTimeFormatter.ISO_LOCAL_DATE.withZone(ZoneId.from(ZoneOffset.UTC));
+    static final DateTimeFormatter DATE_TIME_FORMATTER = DateTimeFormatter.ISO_OFFSET_DATE_TIME.withZone(ZoneId.from(ZoneOffset.UTC));
 
     static PropertySampler INSTANCE = new PropertySampler();
 
@@ -18,7 +25,7 @@ class PropertySampler {
             if (schema.getEnum().isEmpty()) {
                 return null;
             } else {
-                return schema.getEnum().get(0); // first value
+                return schema.getEnum().get(0);
             }
         }
         return switch (schema.getType()) {
@@ -47,8 +54,8 @@ class PropertySampler {
             return "string";
         }
         return switch (schema.getFormat()) {
-            case "date" -> OpenApiSampler.DATE_FORMATTER.format(LocalDateTime.now().truncatedTo(ChronoUnit.SECONDS));
-            case "date-time" -> OpenApiSampler.DATE_TIME_FORMATTER.format(OffsetDateTime.now().truncatedTo(ChronoUnit.SECONDS));
+            case "date" -> PropertySampler.DATE_FORMATTER.format(DATE);
+            case "date-time" -> PropertySampler.DATE_TIME_FORMATTER.format(DATE);
             case "password" -> "qwerty";
             case "byte" -> "aGVsbG8xCg==";
             case "email" -> "info@example.com";

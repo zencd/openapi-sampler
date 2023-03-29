@@ -1,0 +1,12 @@
+{
+  "address": [
+    {
+      "zip": "string",
+      "city": "string",
+      "street": "string",
+      "state": "string"
+    }
+  ],
+  "id": 0,
+  "username": "string"
+}

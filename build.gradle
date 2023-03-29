@@ -1,0 +1,33 @@
+plugins {
+    id 'org.jetbrains.kotlin.jvm' version '1.8.0'
+    id 'java'
+    id 'groovy'
+}
+
+group = 'su.funk'
+version = '1.0-SNAPSHOT'
+
+def versions = [
+        swagger: '2.1.13',
+        junit: '5.8.1',
+]
+
+repositories {
+    mavenCentral()
+}
+
+dependencies {
+    // https://mvnrepository.com/artifact/org.codehaus.groovy/groovy-all
+    testImplementation 'org.codehaus.groovy:groovy-all:3.0.12'
+    api("io.swagger.parser.v3:swagger-parser:${versions.swagger}")
+    testImplementation "org.junit.jupiter:junit-jupiter-api:${versions.junit}"
+    testRuntimeOnly "org.junit.jupiter:junit-jupiter-engine:${versions.junit}"
+}
+
+test {
+    useJUnitPlatform()
+}
+
+kotlin {
+    jvmToolchain(17)
+}

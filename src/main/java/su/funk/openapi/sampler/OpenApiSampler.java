@@ -16,7 +16,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
 
-class OpenApiSampler {
+public class OpenApiSampler {
 
     public static final String REF_PREFIX_SCHEMAS = "#/components/schemas/";
 

@@ -20,18 +20,14 @@ public class OpenApiSampler {
 
     public static final String REF_PREFIX_SCHEMAS = "#/components/schemas/";
 
+    private final ScalarSampler scalars = new ScalarSampler();
+
     public Object getSchemaExample(OpenAPI spec, Schema<?> schema) {
         if (schema.get$ref() != null) {
             var referent = lookupSchemaRef(spec, schema);
             return getSchemaExample(spec, referent);
         } else if (schema.getExample() != null) {
-            if (schema instanceof DateTimeSchema) {
-                return PropertySampler.DATE_TIME_FORMATTER.format((OffsetDateTime) schema.getExample());
-            } else if (schema instanceof DateSchema) {
-                return PropertySampler.DATE_FORMATTER.format(((Date) schema.getExample()).toInstant());
-            } else {
-                return schema.getExample();
-            }
+            return onPreDefinedExample(schema);
         } else if (schema.getProperties() != null) {
             return onProperties(spec, schema.getProperties());
         } else if (schema instanceof ObjectSchema objectSchema) {
@@ -41,7 +37,17 @@ public class OpenApiSampler {
         } else if (schema instanceof ComposedSchema composedSchema) {
             return onComposedSchema(spec, composedSchema);
         } else {
-            return PropertySampler.INSTANCE.sample(schema);
+            return scalars.sample(schema);
+        }
+    }
+
+    private static Object onPreDefinedExample(Schema<?> schema) {
+        if (schema instanceof DateTimeSchema) {
+            return ScalarSampler.DATE_TIME_FORMATTER.format((OffsetDateTime) schema.getExample());
+        } else if (schema instanceof DateSchema) {
+            return ScalarSampler.DATE_FORMATTER.format(((Date) schema.getExample()).toInstant());
+        } else {
+            return schema.getExample();
         }
     }
 

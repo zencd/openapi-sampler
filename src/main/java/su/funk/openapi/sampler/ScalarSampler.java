@@ -1,6 +1,7 @@
 package su.funk.openapi.sampler;
 
 import io.swagger.v3.oas.models.media.Schema;
+import io.swagger.v3.parser.util.SchemaTypeUtil;
 import org.jetbrains.annotations.Nullable;
 
 import java.math.BigDecimal;
@@ -10,15 +11,16 @@ import java.time.ZoneOffset;
 import java.time.format.DateTimeFormatter;
 import java.util.UUID;
 
-class PropertySampler {
+/**
+ * @see SchemaTypeUtil
+ */
+class ScalarSampler {
 
     static final String STRING_DEFAULT = "string";
     static final OffsetDateTime DATE = OffsetDateTime.parse("2023-03-29T21:14:08Z");
 
     static final DateTimeFormatter DATE_FORMATTER = DateTimeFormatter.ISO_LOCAL_DATE.withZone(ZoneId.from(ZoneOffset.UTC));
     static final DateTimeFormatter DATE_TIME_FORMATTER = DateTimeFormatter.ISO_OFFSET_DATE_TIME.withZone(ZoneId.from(ZoneOffset.UTC));
-
-    static PropertySampler INSTANCE = new PropertySampler();
 
     public Object sample(Schema<?> schema) {
         if (schema.getEnum() != null) {
@@ -36,8 +38,7 @@ class PropertySampler {
         };
     }
 
-    @Nullable
-    private static Object enumeration(Schema<?> schema) {
+    private Object enumeration(Schema<?> schema) {
         if (schema.getEnum().isEmpty()) {
             return null;
         } else {
@@ -65,10 +66,10 @@ class PropertySampler {
             return STRING_DEFAULT;
         }
         return switch (schema.getFormat()) {
-            case "date" -> PropertySampler.DATE_FORMATTER.format(DATE);
-            case "date-time" -> PropertySampler.DATE_TIME_FORMATTER.format(DATE);
+            case "date" -> ScalarSampler.DATE_FORMATTER.format(DATE);
+            case "date-time" -> ScalarSampler.DATE_TIME_FORMATTER.format(DATE);
             case "password" -> "qwerty";
-            case "byte" -> "aGVsbG8xCg==";
+            case "byte", "binary" -> "aGVsbG8xCg==";
             case "email" -> "info@example.com";
             case "uuid", "guid" -> UUID.randomUUID().toString();
             default -> STRING_DEFAULT;
